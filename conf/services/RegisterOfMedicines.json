@@ -1,0 +1,88 @@
+{
+    "service": "RegisterOfMedicines",
+    "objects": [
+        {
+            "base": "CreateBucket",
+            "view" : {
+                "type": "DossierChangeRequest",
+                "attributes": [
+                    {
+                        "name": "name",
+                        "filled":"func.GetUUID()"
+                    },
+                    {
+                        "name": "versioning",
+                        "filled": true
+                    },
+                    {
+                        "name": "status",
+                        "tags" : true,
+                        "filled": "Edit"
+                    }
+                ]
+            }
+        },
+        {
+            "base": "Bucket",
+            "view" : {
+                "type": "DossierChangeRequest",
+                "attributes": [
+                    {
+                        "name": "name"
+                    },
+                    {
+                        "name": "versioning"
+                    },
+                    {
+                        "name": "status",
+                        "tags" : true
+                    }
+                ]
+            }
+        },
+        {
+            "base": "CreateObject",
+            "view" : {
+                "type": "DossierChangeRequestXml",
+                "attributes": [
+                    {
+                        "name": "bucket",
+                        "validation": [
+                            {
+                                "type": "DossierChangeRequest"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "name",
+                        "filled": "request.xml"
+                    },
+                    {
+                        "name": "prefix",
+                        "filled": ""
+                    },
+                    {
+                        "name": "contentType",
+                        "validation": [
+                            "application/xml"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "base": "Object",
+            "view" : {
+                "type": "DossierChangeRequestXml",
+                "attributes": [
+                    {
+                        "name": "name"
+                    },
+                    {
+                        "name": "prefix"
+                    }
+                ]
+            }
+        }
+    ]
+}

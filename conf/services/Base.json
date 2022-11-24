@@ -1,0 +1,71 @@
+{
+    "service": "Base",
+    "objects": [
+        {
+            "base": "CreateBucket",
+            "view" : {
+                "type": "Bucket",
+                "attributes": [
+                    {
+                        "name": "name"
+                    },
+                    {
+                        "name": "versioning"
+                    },
+                    {
+                        "name": "status",
+                        "tags" : true,
+                        "filled": "Edit"
+                    }
+                ]
+            }
+        },
+        {
+            "base": "Bucket",
+            "view" : {
+                "type": "Bucket",
+                "attributes": [
+                    {
+                        "name": "name"
+                    },
+                    {
+                        "name": "versioning"
+                    },
+                    {
+                        "name": "status",
+                        "tags" : true
+                    }
+                ]
+            }
+        },
+        {
+            "base": "CreateObject",
+            "view" : {
+                "type": "Object",
+                "attributes": [
+                    {
+                        "name": "name"
+                    },
+                    {
+                        "name": "prefix"
+                    },
+                    {
+                        "name": "status",
+                        "tags" : true,
+                        "filled": "Edit"
+                    },
+                    {
+                        "name": "note",
+                        "tags" : true,
+                        "tags" : true
+                    },
+                    {
+                        "name": "title",
+                        "tags" : true,
+                        "tags" : true
+                    }
+                ]
+            }
+        }
+    ]
+}

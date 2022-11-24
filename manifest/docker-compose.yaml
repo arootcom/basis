@@ -1,0 +1,47 @@
+version: '3.8'
+
+name: "fsplat"
+
+services:
+  minio:
+    image: minio/minio:latest
+    hostname: minio1
+    command: server /data1 --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: fsroot
+      MINIO_ROOT_PASSWORD: fsrootpass
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+#    volumes:
+#      - data1-1:/data1
+  kafka:
+    image: spotify/kafka
+    hostname: kafka
+    environment:
+      - ADVERTISED_HOST=kafka
+      - ADVERTISED_PORT=9092
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+#  mc-service:
+#    image: minio/mc
+#    depends_on:
+#      minio:
+#        condition: service_healthy
+#    restart: on-failure
+#    entrypoint: >
+#      /bin/sh -c "
+#      /usr/bin/mc alias set grlsminio http://minio:9000 fsroot fsrootpass;
+#      /usr/bin/mc mb grlsminio/main;
+#      /usr/bin/mc policy set public grlsminio/main;
+#      /usr/bin/mc admin config set grlsminio/ notify_kafka:main_kafka brokers='kafka:9092' topic='fs-stream-events'; 
+#      "
+#
+#volumes:
+#  data1-1:
