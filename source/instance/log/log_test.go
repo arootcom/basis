@@ -12,16 +12,16 @@ var tLevels = []string{"All", "Debug", "Error", "Info", "None"}
 func TestLevel(t *testing.T) {
     isLevel := false
     for _, tLevel := range tLevels {
-        if tLevel == os.Getenv("BASIS_LOG_LEVEL") {
+        if tLevel == os.Getenv("WOODCHUCK_LOG_LEVEL") {
             isLevel = true
             break
         }
     }
 
     if !isLevel {
-        t.Error("For:", "BASIS_LOG_LEVEL", "expected:", tLevels, "got:", os.Getenv("BASIS_LOG_LEVEL"))
+        t.Error("For:", "WOODCHUCK_LOG_LEVEL", "expected:", tLevels, "got:", os.Getenv("WOODCHUCK_LOG_LEVEL"))
     } else {
-        fmt.Println("BASIS_LOG_LEVEL =", os.Getenv("BASIS_LOG_LEVEL"))
+        fmt.Println("WOODCHUCK_LOG_LEVEL =", os.Getenv("WOODCHUCK_LOG_LEVEL"))
     }
 
     Debug("msg", "show", "debug", "level")

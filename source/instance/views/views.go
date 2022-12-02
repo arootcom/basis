@@ -16,7 +16,7 @@ var instance *Services
 
 func GetInstance() *Services {
     once.Do(func() {
-        dir := os.Getenv("BASIS_VIEWS_DIR")
+        dir := os.Getenv("WOODCHUCK_VIEWS_DIR")
         log.Info("start", "GetInstance:", dir)
 
         files, err := ioutil.ReadDir(dir)

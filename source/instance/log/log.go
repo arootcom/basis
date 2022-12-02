@@ -17,7 +17,7 @@ func getInstance() log.Logger {
         instance = log.NewLogfmtLogger(os.Stdout)
         instance = log.With(instance, "ts", log.DefaultTimestampUTC)
 
-        switch os.Getenv("BASIS_LOG_LEVEL") {
+        switch os.Getenv("WOODCHUCK_LOG_LEVEL") {
             case "All":
 	            instance = level.NewFilter(instance, level.AllowAll())
                 break
