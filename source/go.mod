@@ -1,4 +1,4 @@
-module wookchuck
+module woodchuck
 
 go 1.19
 

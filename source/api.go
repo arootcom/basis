@@ -2,7 +2,7 @@ package main
 
 import (
     "log"
-    "filestorage/api"
+    "woodchuck/api"
 )
 
 func main() {

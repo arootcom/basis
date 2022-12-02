@@ -3,7 +3,7 @@ package views
 import (
     "fmt"
     "errors"
-    "filestorage/instance/log"
+    "woodchuck/instance/log"
 )
 
 //

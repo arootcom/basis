@@ -9,8 +9,8 @@ import (
     "github.com/minio/minio-go/v7"
     "github.com/minio/minio-go/v7/pkg/tags"
 
-    "filestorage/instance/storage"
-    "filestorage/instance/log"
+    "woodchuck/instance/storage"
+    "woodchuck/instance/log"
 )
 
 //

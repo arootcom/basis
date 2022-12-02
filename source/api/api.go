@@ -7,10 +7,10 @@ import (
     //"encoding/json"
     "github.com/gorilla/mux"
 
-    "filestorage/view"
-    "filestorage/model/bucket"
-    "filestorage/model/object"
-    "filestorage/instance/log"
+    "woodchuck/view"
+    "woodchuck/model/bucket"
+    "woodchuck/model/object"
+    "woodchuck/instance/log"
 )
 
 //

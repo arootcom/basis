@@ -6,8 +6,8 @@ import (
     "net/http"
     "encoding/json"
 
-    "filestorage/view"
-    "filestorage/instance/log"
+    "woodchuck/view"
+    "woodchuck/instance/log"
 )
 
 //

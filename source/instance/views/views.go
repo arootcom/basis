@@ -8,7 +8,7 @@ import (
     "io/ioutil"
     "encoding/json"
 
-    "filestorage/instance/log"
+    "woodchuck/instance/log"
 )
 
 var once sync.Once

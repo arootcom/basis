@@ -4,8 +4,8 @@ import (
     "fmt"
     "context"
 
-    "filestorage/instance/storage"
-    "filestorage/instance/log"
+    "woodchuck/instance/storage"
+    "woodchuck/instance/log"
 )
 
 //

@@ -6,9 +6,9 @@ import (
     "github.com/satori/go.uuid"
     //"errors"
 
-    "filestorage/model/bucket"
-    "filestorage/instance/log"
-    "filestorage/instance/views"
+    "woodchuck/model/bucket"
+    "woodchuck/instance/log"
+    "woodchuck/instance/views"
 )
 
 //

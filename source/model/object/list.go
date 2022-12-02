@@ -6,8 +6,8 @@ import (
     "context"
     "github.com/minio/minio-go/v7"
 
-    "filestorage/instance/storage"
-    "filestorage/instance/log"
+    "woodchuck/instance/storage"
+    "woodchuck/instance/log"
 )
 
 //
