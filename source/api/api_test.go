@@ -36,7 +36,7 @@ func TestCreateBucket(t *testing.T) {
             continue
         }
 
-        req.Header.Add("X-Basis-Service", tReq.Service)
+        req.Header.Add("X-Woodchuck-Service", tReq.Service)
         req.Header.Add("Content-Type", "application/json")
 
         res, err := client.Do(req)

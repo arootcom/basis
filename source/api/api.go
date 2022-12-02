@@ -67,7 +67,7 @@ func listBucket(res http.ResponseWriter, req *http.Request) {
 
 // Create bucket
 func createBucket(res http.ResponseWriter, req *http.Request) {
-    service := req.Header.Get("X-Basis-Service")
+    service := req.Header.Get("X-Woodchuck-Service")
     log.Info("service", service)
 
     custom, err := fromBody(req)
