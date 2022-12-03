@@ -19,9 +19,18 @@
 
 ### Basis service
 
-#### Create bucket without versioning
+#### List buckets
+
+    curl -v -X GET http://localhost:9101/
+
+#### Create bucket
 
     curl -v -X POST  http:/localhost:9101/ -H 'Content-Type: application/json' -H 'X-Woodchuck-Service: Base' -d '{"Type":"Bucket","Attributes":{"name":"wo-versioning","versioning":false}}'
 
+#### Get bucket
 
+    curl -v -X GET http://localhost:9101/wo-versioning
 
+### Delete bucket
+
+    curl -v -X DELETE http://localhost:9101/wo-versioning
