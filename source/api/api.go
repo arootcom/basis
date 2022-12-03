@@ -70,7 +70,7 @@ func createBucket(res http.ResponseWriter, req *http.Request) {
     service := req.Header.Get("X-Woodchuck-Service")
     log.Info("service", service)
 
-    custom, err := fromBody(req)
+    custom, err := bodyToCustom(req)
     if err != nil {
         toError(res, "CREATE_NEW_CUSTOM", err, http.StatusInternalServerError)
         return
@@ -163,10 +163,13 @@ func deleteBucket(res http.ResponseWriter, req *http.Request) {
 
 // Create object
 func createObject(res http.ResponseWriter, req *http.Request) {
-    vars := mux.Vars(req)
-    name := vars["name"]
+    service := req.Header.Get("X-Woodchuck-Service")
+    log.Info("service", service)
 
-    exists := bucket.IsExistsBucketByName(name)
+    vars := mux.Vars(req)
+    bucket_name := vars["name"]
+
+    exists := bucket.IsExistsBucketByName(bucket_name)
     if !exists {
         toError(res, "CREATE_OBJECT_BUCKET_NOT_FOUND", errors.New("Bucket not found for create object"), http.StatusNotFound)
         return
@@ -175,36 +178,29 @@ func createObject(res http.ResponseWriter, req *http.Request) {
     metadata := req.PostFormValue("metadata")
     log.Info("metadata", metadata)
 
+    custom, err := stringToCustom(metadata)
+    if err != nil {
+        toError(res, "CREATE_OBJECT_CUSTOM", err, http.StatusInternalServerError)
+        return
+    }
 
-/*
-    obj, err := object.NewCreateObject()
+    obj, err := custom.NewCreateObject(service, bucket_name)
     if err != nil {
         toError(res, "CREATE_OBJECT_NEW", err, http.StatusInternalServerError)
         return
     }
-/*
-    file, header, err := req.FormFile("datafile")
+    //log.Info("obj", obj)
+
+    file, header, err := req.FormFile("filedata")
     if err != nil {
         toError(res, "CREATE_OBJECT_FORM_FILE", err, http.StatusInternalServerError)
         return
     }
     log.Info("filename", header.Filename, "Content-Type:", header.Header.Get("Content-Type"), "Size:", header.Size)
 
-    obj.Bucket = name
     obj.ContentType = header.Header.Get("Content-Type")
-    obj.Prefix = req.PostFormValue("prefix")
-    obj.Name = req.PostFormValue("name")
     if obj.Name == "" {
         obj.Name = header.Filename
-    }
-
-    meta := req.PostFormValue("metadata")
-    log.Info("metadata", meta)
-
-    err = json.Unmarshal([]byte(meta), &obj.Metadata)
-    if err != nil {
-        toError(res, "CREATE_OBJECT_UNMARSHAL", err, http.StatusInternalServerError)
-        return
     }
 
     err = obj.ValidationCreateObject()
@@ -226,7 +222,7 @@ func createObject(res http.ResponseWriter, req *http.Request) {
     }
 
     res.Header().Set("Location", fmt.Sprintf("/%s/%s", obj.Bucket, obj.GetCreateObjectKey()))
-*/
+
     res.WriteHeader(http.StatusCreated)
     return
 }

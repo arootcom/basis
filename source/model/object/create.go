@@ -5,6 +5,7 @@ import (
     "fmt"
     "regexp"
     "errors"
+    "strings"
     "context"
     "github.com/minio/minio-go/v7"
     "github.com/minio/minio-go/v7/pkg/tags"
@@ -24,7 +25,46 @@ type CreateObject struct {
 
 // New create object
 func NewCreateObject() (*CreateObject, error) {
-    return &CreateObject{}, nil
+    return &CreateObject{
+        Metadata: make(map[string]string),
+        Tags: make(map[string]string),
+    }, nil
+}
+
+//
+func (o *CreateObject) SetService(value string) error {
+    if value == "" {
+        return errors.New("Service value empty")
+    }
+
+    o.Metadata["Service"] = value
+    return nil
+}
+
+//
+func (o *CreateObject) SetType(value string) error {
+    if value == "" {
+        return errors.New("Type value empty")
+    }
+
+    o.Metadata["Type"] = value
+    return nil
+}
+
+//
+func (o *CreateObject) SetTag(key string, value string) error {
+    if key == "" {
+        return errors.New("Tag key empty")
+    }
+
+    if value == "" {
+        return errors.New("Tag value empty")
+    }
+
+    key = strings.Title(key)
+
+    o.Tags[key] = value
+    return nil
 }
 
 // Get create object key

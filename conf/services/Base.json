@@ -53,16 +53,20 @@
                         "name": "status",
                         "tags" : true,
                         "filled": "Edit"
+                    }
+                ]
+            }
+        },
+        {
+            "base": "Object",
+            "view" : {
+                "type": "Object",
+                "attributes": [
+                    {
+                        "name": "key"
                     },
                     {
-                        "name": "note",
-                        "tags" : true,
-                        "tags" : true
-                    },
-                    {
-                        "name": "title",
-                        "tags" : true,
-                        "tags" : true
+                        "name": "status"
                     }
                 ]
             }

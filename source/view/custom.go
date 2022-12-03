@@ -7,6 +7,7 @@ import (
     //"errors"
 
     "woodchuck/model/bucket"
+    "woodchuck/model/object"
     "woodchuck/instance/log"
     "woodchuck/instance/views"
 )
@@ -112,7 +113,6 @@ func (c *Custom) NewCreateBucket(service string) (*bucket.CreateBucket, error) {
         log.Error("error", "NewCreateBucket:", err)
         return nil, err
     }
-    log.Debug("view", fmt.Sprintf("%+v", view))
 
     create, err := bucket.NewCreateBucket()
     if err != nil {
@@ -178,3 +178,76 @@ func (c *Custom) NewCreateBucket(service string) (*bucket.CreateBucket, error) {
     log.Debug("success", "NewCreateBucket: bucket =", fmt.Sprintf("%+v", create))
     return create, nil
 }
+
+//
+func (c *Custom) NewCreateObject(service string, bucket_name string) (*object.CreateObject, error) {
+    log.Debug("start", "NewCreateObject: service =", service)
+
+    instance := views.GetInstance()
+    view, err := instance.GetViewByType(service, "CreateObject", c.Type)
+    if err != nil {
+        log.Error("error", "NewCreateObject:", err)
+        return nil, err
+    }
+    log.Debug("view", fmt.Sprintf("%+v", view))
+
+    create, err := object.NewCreateObject()
+    if err != nil {
+        log.Error("error", "NewCreateObject:", err)
+        return nil, err
+    }
+
+    create.SetService(service)
+    create.SetType(c.Type)
+    create.Bucket = bucket_name
+
+    vcreate := reflect.ValueOf(create)
+    vcreate = reflect.Indirect(vcreate)
+
+    for _, attr := range view.Attributes {
+        log.Debug("attribute", attr)
+
+        var val reflect.Value
+        if attr.Filled != nil {
+            val = reflect.ValueOf(attr.Filled)
+        } else {
+            value := c.GetValueByAttributeName(attr.Name)
+            val = reflect.ValueOf(value)
+        }
+
+        if !val.IsValid() {
+            continue
+        }
+        log.Debug("value", val)
+
+        if attr.Tags {
+            err = create.SetTag(attr.Name, val.String())
+            if err != nil {
+                break
+            }
+        } else {
+            for i := 0; i < vcreate.NumField(); i++ {
+                field := vcreate.Type().Field(i)
+                name := field.Tag.Get("json")
+
+                if attr.Name == name {
+                    log.Debug("field", "attr.Name =", attr.Name, ", name =", name)
+
+                    if field.Type.Name() == "string" {
+                        str := val.String()
+                        vcreate.FieldByName(field.Name).SetString(str)
+                        log.Debug("filed", "SetString:", field.Name, "=>", str)
+                    } else if field.Type.Name() == "bool" {
+                        vcreate.FieldByName(field.Name).SetBool(val.Bool())
+                        log.Debug("field", "SetBool:", field.Name, "=>", val.Bool())
+                    }
+                    break
+                }
+            }
+        }
+    }
+
+    log.Debug("success", "NewCreateObject: object =", fmt.Sprintf("%+v", create))
+    return create, nil
+}
+
