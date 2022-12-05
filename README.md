@@ -35,9 +35,17 @@
 
     curl -v -X DELETE http://localhost:9101/wo-versioning
 
+#### List objects by bucket
+
+    curl -v -X GET http://localhost:9101/wo-versioning/
+
 #### Create object
 
     curl -v -X POST http:/localhost:9101/wo-versioning/  -H 'Content-Type: multipart/form-data' -H 'X-Woodchuck-Service: Base' --form metadata='{"type":"Object","attributes":{"name":"request.xml","prefix":"files/"}}' --form filedata=@./test/request_v1.xml
+
+#### Get data object
+
+    culr -v -X GET http://localhost:9101/wo-versioning/files/request.xml
 
 #### Delete object
 
