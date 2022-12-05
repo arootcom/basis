@@ -74,3 +74,34 @@ func GetListObjectByBucket(bucket_name string, prefix string) (listCustom *ListC
     return listCustom, nil
 }
 
+//
+func GetListObjectVersion(bucket_name string, file string) (listCustom *ListCustom, err error) {
+    log.Debug("start", "view.GetListObjectVersion:")
+
+    listCustom = new(ListCustom)
+    objects, err := object.GetListObjectVersion(bucket_name, file)
+
+    if err != nil {
+        log.Error("error", "view.GetListObjectVersion:", err)
+        return nil, err
+    }
+
+    for _, item := range objects.Items {
+        custom, err := NewCustomByObject(item)
+        if err != nil {
+            break
+        }
+        listCustom.Items = append(listCustom.Items, custom)
+    }
+
+    if err != nil {
+        log.Error("error", "view.GetListObjectVersion:", err)
+        return nil, err
+    }
+
+
+    log.Debug("success", "view.GetListObjectVersion:", fmt.Sprintf("%+v", listCustom))
+    return listCustom, nil
+}
+
+

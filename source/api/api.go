@@ -266,7 +266,7 @@ func metaObject(res http.ResponseWriter, req *http.Request) {
         return
     }
 
-    objects, err := object.GetListObjectVersion(name, file)
+    objects, err := view.GetListObjectVersion(name, file)
     if err != nil {
         toError(res, "META_OBLECT_NEW", err, http.StatusInternalServerError)
         return
@@ -387,13 +387,13 @@ func updateObject(res http.ResponseWriter, req *http.Request) {
         return
     }
 
-    datafile, header, err := req.FormFile("datafile")
+    filedata, header, err := req.FormFile("filedata")
     if err != nil {
         toError(res, "CREATE_OBJECT_FORM_FILE", err, http.StatusInternalServerError)
         return
     }
     log.Info("filename", header.Filename, "Content-Type:", header.Header.Get("Content-Type"), "Size:", header.Size)
-    log.Info("datafile", datafile)
+    log.Info("filedata", filedata)
 
     create, err := object.NewCreateObject()
     if err != nil {
@@ -413,7 +413,7 @@ func updateObject(res http.ResponseWriter, req *http.Request) {
         return
     }
 
-    err = create.CreateObjectInStorage(datafile, header.Size)
+    err = create.CreateObjectInStorage(filedata, header.Size)
     if err != nil {
         toError(res, "UPDATE_BUCKET_CREATED", err, http.StatusInternalServerError)
         return

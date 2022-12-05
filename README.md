@@ -47,6 +47,14 @@
 
     culr -v -X GET http://localhost:9101/wo-versioning/files/request.xml
 
+#### Update data object
+
+    curl -v -X PUT http:/localhost:9101/wo-versioning/files/request.xml -H 'Content-Type: multipart/form-data' --form filedata=@./test/request_v2.xml
+
+#### Get list version metadata object
+
+    culr -v -X OPTIONS http://localhost:9101/wo-versioning/files/request.xml
+
 #### Delete object
 
     curl -v -X DELETE http://localhost:9101/wo-versioning/files/request.xml
