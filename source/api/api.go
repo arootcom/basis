@@ -238,7 +238,7 @@ func listObject(res http.ResponseWriter, req *http.Request) {
         return
     }
 
-    objects, err := object.GetListObjectByBucket(name, "")
+    objects, err := view.GetListObjectByBucket(name, "")
     if err != nil {
         toError(res, "LIST_OBLECTS_BY_BUCKET_GET", err, http.StatusInternalServerError)
         return

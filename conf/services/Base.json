@@ -66,7 +66,26 @@
                         "name": "key"
                     },
                     {
-                        "name": "status"
+                        "name":"name"
+                    },
+                    {
+                        "name":"prefix"
+                    },
+                    {
+                        "name": "status",
+                        "tags" : true
+                    },
+                    {
+                        "name":"versionId"
+                    },
+                    {
+                        "name":"size"
+                    },
+                    {
+                        "name":"contentType"
+                    },
+                    {
+                        "name":"utime"
                     }
                 ]
             }

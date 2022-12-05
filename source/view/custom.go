@@ -251,3 +251,68 @@ func (c *Custom) NewCreateObject(service string, bucket_name string) (*object.Cr
     return create, nil
 }
 
+//
+func NewCustomByObject(object *object.Object) (*Custom, error) {
+    log.Debug("start", "view.NewCustomByObject: object =", fmt.Sprintf("%+v", object))
+
+    oService, err := object.GetService()
+    if err != nil {
+        log.Error("error", "view.NewCustomByObject:", err)
+        return nil, err
+    }
+
+    oType, err := object.GetType()
+    if err != nil {
+        log.Error("error", "view.NewCustomByObject:", err)
+        return nil, err
+    }
+
+    instance := views.GetInstance()
+    view, err := instance.GetViewByType(oService, "Object", oType)
+    if err != nil {
+        log.Error("error", "view.NewCustomByObject:", err)
+        return nil, err
+    }
+    log.Debug("view", "view.NewCustomByObject:", fmt.Sprintf("%+v", view))
+
+    custom, err := NewCustom()
+    if err != nil {
+        log.Error("error", "view.NewCustomByObject:", err)
+        return nil, err
+    }
+    custom.Type = oType
+
+    vObject := reflect.ValueOf(object)
+    vObject = reflect.Indirect(vObject)
+
+    for _, attr := range view.Attributes {
+        if( attr.Tags ) {
+            value, _ := object.GetTagValueByKey(attr.Name)
+            log.Debug("value", "view.NewCustomByObject: attribute =", attr.Name, ", value =", value)
+            custom.SetValueByAttributeName(attr.Name, value)
+        } else {
+            for i := 0; i < vObject.NumField(); i++ {
+                field := vObject.Type().Field(i)
+                name := field.Tag.Get("json")
+
+                if attr.Name == name {
+                    value := vObject.FieldByName(field.Name)
+                    if field.Type.Name() == "string" {
+                        log.Debug("value", "view.NewCustomByObject: attribute =", attr.Name, ", value =", value.String())
+                        custom.SetValueByAttributeName(attr.Name, value.String())
+                    } else if field.Type.Name() == "bool" {
+                        log.Debug("value", "view.NewCustomByObject: attribute =", attr.Name, ", value =", value.Bool())
+                        custom.SetValueByAttributeName(attr.Name, value.Bool())
+                    } else if field.Type.Name() == "int64" {
+                        log.Debug("value", "view.NewCustomByObject: attribute =", attr.Name, ", value =", value.Int())
+                        custom.SetValueByAttributeName(attr.Name, value.Int())
+                    }
+                    break
+                }
+            }
+        }
+    }
+
+    log.Debug("success", "view.NewCustomByObject:", fmt.Sprintf("%+v", custom))
+    return custom, nil
+}

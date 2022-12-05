@@ -3,8 +3,10 @@ package object
 import (
     "io"
     "fmt"
+    "errors"
     "regexp"
     "context"
+    "strings"
     "io/ioutil"
     "github.com/minio/minio-go/v7"
     "github.com/minio/minio-go/v7/pkg/tags"
@@ -113,6 +115,39 @@ func NewObjectByVersion(bucket string, key string, versionId string) (*Object, e
 
     log.Debug("success", "NewObjectByVersion:", object.GetObjectPath(), object)
     return &object, nil
+}
+
+//
+func (o *Object) GetService() (service string, err error) {
+    service, exists := o.Metadata["Service"]
+    if !exists {
+        err = errors.New("Service not defined")
+        return "", err
+    }
+    return service, nil
+}
+
+//
+func (o *Object) GetType() (t string, err error) {
+    t, exists := o.Metadata["Type"]
+    if !exists {
+        err = errors.New("Type not defined")
+        return "", err
+    }
+    return t, nil
+}
+
+//
+func (o *Object) GetTagValueByKey(key string) (string, error) {
+    key = strings.Title(key)
+
+    value, exists := o.Tags[key]
+    if !exists {
+        err := errors.New(fmt.Sprintf("%s not defined", key))
+        return "", err
+    }
+
+    return value, nil
 }
 
 // Get object's data
