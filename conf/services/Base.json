@@ -58,6 +58,18 @@
             }
         },
         {
+            "base": "UpdateObject",
+            "view" : {
+                "type": "Object",
+                "attributes": [
+                    {
+                        "name": "status",
+                        "enum": ["Edit","Archive"]
+                    }
+                ]
+            }
+        },
+        {
             "base": "Object",
             "view" : {
                 "type": "Object",

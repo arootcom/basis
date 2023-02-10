@@ -36,6 +36,7 @@ func (s *Server) Run(port string) error {
     router.HandleFunc("/{name}/{file:.*}", wrapperReq(fileObject)).Methods("GET")
     router.HandleFunc("/{name}/{file:.*}", wrapperReq(deleteObject)).Methods("DELETE")
     router.HandleFunc("/{name}/{file:.*}", wrapperReq(updateObject)).Methods("PUT")
+    router.HandleFunc("/{name}/{file:.*}", wrapperReq(patchObject)).Methods("PATCH")
 
     http.Handle("/", router)
     return http.ListenAndServe(port, nil)
@@ -423,3 +424,31 @@ func updateObject(res http.ResponseWriter, req *http.Request) {
     return
 }
 
+// Patch object
+func patchObject(res http.ResponseWriter, req *http.Request) {
+    vars := mux.Vars(req)
+    name := vars["name"]
+    file := vars["file"]
+
+    exists := bucket.IsExistsBucketByName(name)
+    if !exists {
+        toError(res, "PATCH_OBJECT_BUCKET_NOT_FOUND", errors.New("Bucket not found for create object"), http.StatusNotFound)
+        return
+    }
+
+    exists = object.IsExistsObjectByKey(name, file)
+    if !exists {
+        toError(res, "PATCH_OBJECT_OBJECT_NOT_FOUND", errors.New("Object not found"), http.StatusNotFound)
+        return
+    }
+
+    obj, err := object.NewObject(name, file)
+    if err != nil {
+        toError(res, "PATCH_OBLECT_NEW", err, http.StatusInternalServerError)
+        return
+    }
+
+    toJSON(res, obj, http.StatusOK)
+    //res.WriteHeader(http.StatusOK)
+    return
+}

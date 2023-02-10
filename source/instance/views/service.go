@@ -26,7 +26,7 @@ type Attribute struct {
     Name string                         `json:"name"`
     Filled Value                        `json:"filled"`
     Tags bool                           `json:"tags"`
-    Validation []interface{}            `json:"validation"`
+    Enum []string                       `json:"enum"`
 }
 
 //
